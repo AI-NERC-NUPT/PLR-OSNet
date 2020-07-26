@@ -1,0 +1,46 @@
+model:
+  name: 'plr_osnet'
+  pretrained: True
+
+data:
+  type: 'image'
+  sources: ['market1501']
+  targets: ['market1501']
+  height: 256
+  width: 128
+  combineall: False
+  transforms: ['random_flip']
+  save_dir: 'log'
+
+loss:
+  name: 'triplet'
+  softmax:
+    label_smooth: True
+  triplet:
+    weight_t: 1.
+    weight_x: 1.
+    margin: 0. # 0.-->softmargin
+
+sampler:
+  train_sampler: 'RandomIdentitySampler'
+  num_instances: 4 
+
+train:
+  optim: 'adam'
+  lr: 0.000035
+  max_epoch: 120
+  batch_size: 64
+  lr_scheduler: 'warmup'
+  multiplier: 10
+  total_epoch: 19
+  stepsize: [40, 70]
+
+test:
+  batch_size: 300
+  dist_metric: 'euclidean'
+  normalize_feature: False
+  evaluate: False
+  eval_freq: 10
+  rerank: False
+  visactmap: False
+
